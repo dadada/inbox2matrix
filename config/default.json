@@ -1,0 +1,9 @@
+{
+	"account": {
+  		"user": "test",
+  		"password": "password",
+  		"host": "example.com",
+  		"port": 993,
+  		"tls": true
+	}
+}
