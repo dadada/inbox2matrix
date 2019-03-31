@@ -1,0 +1,17 @@
+{
+  "name": "inbox2matrix",
+  "version": "1.0.0",
+  "description": "",
+  "main": "inbox2matrix.js",
+  "dependencies": {
+    "config": "^3.0.1",
+    "imap": "^0.8.19",
+    "process": "^0.11.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
