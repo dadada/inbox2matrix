@@ -1,0 +1,3 @@
+config/production.json
+*.js
+node_modules/
