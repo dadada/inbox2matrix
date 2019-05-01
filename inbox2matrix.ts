@@ -1,16 +1,25 @@
 import Imap = require('imap');
 import config = require('config');
-import matrix = require("matrix-js-sdk");
+
+global.Olm = require('olm');
+import matrix = require('matrix-js-sdk');
 
 let accounts = config.get('accounts');
 
-let myUserId = accounts.matrix.user;
+import Storage = require('dom-storage');
+
+let myUserId = accounts.matrix.user_id;
 let myRoom = accounts.matrix.room;
 
+var localStorage = new Storage('./db.json', { strict: false, ws: '  ' });
+const webStorageSessionStore = new matrix.WebStorageSessionStore(localStorage);
+
 let client = matrix.createClient({
-  baseUrl: accounts.matrix.baseUrl,
-  accessToken: accounts.matrix.accessToken,
-  userId: myUserId
+  baseUrl: accounts.matrix.well_known.homeserver.base_url,
+  accessToken: accounts.matrix.access_token,
+  userId: myUserId,
+  sessionStore: webStorageSessionStore,
+  deviceId: accounts.matrix.device_id
 });
 
 var imap = new Imap(accounts.imap);
@@ -18,14 +27,6 @@ var imap = new Imap(accounts.imap);
 function openInbox(cb) {
   imap.openBox('INBOX', false, cb);
 }
-
-client.on("RoomMember.membership", function(event, member) {
-  if (member.membership === "invite" && member.userId === myUserId) {
-    client.joinRoom(member.roomId).done(function() {
-      console.log("Auto-joined %s", member.roomId);
-    });
-  }
-});
 
 imap.once('ready', function() {
   openInbox(function(err, box) {
@@ -105,10 +106,6 @@ imap.once('error', function(err) {
 imap.once('end', function() {
   console.log('Connection ended');
 });
- 
-imap.connect();
-
-client.startClient({initialSyncLimit: 200});
 
 client.once('sync', function(state, prevState, res) {
     if(state === 'PREPARED') {
@@ -118,4 +115,16 @@ client.once('sync', function(state, prevState, res) {
     }
 });
 
+
+async function startBot() {
+  try {
+    await imap.connect();
+    await client.initCrypto();
+    await client.startClient({initialSyncLimit: 200});
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+startBot();
 setInterval(processUnseen, 5 * 60 * 1000);

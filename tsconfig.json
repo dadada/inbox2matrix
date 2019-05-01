@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "types" : [
+            "node"
+        ]
+    },
+    "files": [
+    	    "inbox2matrix.ts",
+    	    "globals.d.ts"
+    ]
+}

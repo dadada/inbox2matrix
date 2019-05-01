@@ -4,9 +4,12 @@
   "description": "",
   "main": "inbox2matrix.js",
   "dependencies": {
+    "@types/node": "^11.13.8",
     "config": "^3.1.0",
+    "dom-storage": "^2.1.0",
     "imap": "^0.8.19",
     "matrix-js-sdk": "^1.1.0-rc.1",
+    "olm": "https://matrix.org/packages/npm/olm/olm-3.0.0.tgz",
     "process": "^0.11.10"
   },
   "devDependencies": {},
