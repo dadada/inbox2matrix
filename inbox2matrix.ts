@@ -1,7 +1,7 @@
 import Imap = require('imap');
 import config = require('config');
 
-global.Olm = require('olm');
+//global.Olm = require('olm');
 import matrix = require('matrix-js-sdk');
 
 let accounts = config.get('accounts');
@@ -54,14 +54,14 @@ function fetchAndReport(results) {
     });
 
     msg.once('end', () => {
-        let content = {
-          'body': buffer,
-          'msgtype': 'm.text'
-        };
+      let content = {
+        'body': buffer,
+        'msgtype': 'm.text'
+      };
 
-        client.sendEvent(myRoom, "m.room.message", content, "", (err, res) => {
-          console.log(err);
-        });
+      client.sendEvent(myRoom, "m.room.message", content, "", (err, res) => {
+        console.log(err);
+      });
     });
   });
 
@@ -127,4 +127,4 @@ async function startBot() {
 }
 
 startBot();
-setInterval(processUnseen, 5 * 60 * 1000);
+setInterval(processUnseen, 10 * 1000);
