@@ -1,13 +1,13 @@
-FROM node:10
+FROM node:current
 
 ENV NODE_ENV production
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-COPY config ./
+#COPY config ./
+COPY inbox2matrix.js ./
 
-RUN ulimit -a
 RUN npm install
 
 CMD [ "npm", "start" ]

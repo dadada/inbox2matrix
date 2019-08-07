@@ -71,11 +71,11 @@ function fetchAndReport(results) {
 
   fetched.once('end', function() {
     console.log('Done fetching all messages!');
-    imap.end();
   });
 }
 
 function processUnseen() {
+  console.log("processUnseen");
   imap.search(['UNSEEN'], (err, results) => {
     if (err) console.log(err);
     else {
