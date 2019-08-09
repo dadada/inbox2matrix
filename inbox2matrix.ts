@@ -31,7 +31,7 @@ function openInbox(cb) {
 imap.once('ready', function() {
   openInbox(function(err, box) {
     if (err) throw err;
-    console.log('ready');
+    console.log('IMAP inbox is ready');
   });
 });
 
@@ -49,7 +49,7 @@ function fetchAndReport(results) {
         buffer += chunk.toString('utf-8').replace(/(\r\n\r\n|\n|\r\n|\r)/g, "\n");
       });
       stream.once('end', () => {
-        console.log('Buffer: %s', buffer);
+        console.log('Body: %s', buffer);
       });
     });
 
@@ -60,13 +60,13 @@ function fetchAndReport(results) {
       };
 
       client.sendEvent(myRoom, "m.room.message", content, "", (err, res) => {
-        console.log(err);
+        if (err) console.log(err.message);
       });
     });
   });
 
   fetched.once('error', (err) => {
-    console.log(err);
+    if (err) console.log(err.message);
   });
 
   fetched.once('end', function() {
@@ -75,21 +75,20 @@ function fetchAndReport(results) {
 }
 
 function processUnseen() {
-  console.log("processUnseen");
   imap.search(['UNSEEN'], (err, results) => {
-    if (err) console.log(err);
+    if (err) console.log(err.message);
     else {
       try {
         fetchAndReport(results);
       } catch (e) {
-        console.log(e);
+        console.log(e.message);
       }
     }
   });
 }
 
 imap.once('mail', (numNewMsgs : number) => {
-  console.log(`You have ${numNewMsgs} mail`);
+  console.log(`Inbox has ${numNewMsgs} mails`);
   processUnseen();
 });
 
@@ -104,14 +103,12 @@ imap.once('error', function(err) {
 });
  
 imap.once('end', function() {
-  console.log('Connection ended');
+  console.log('IMAP connection ended');
 });
 
 client.once('sync', function(state, prevState, res) {
-    if(state === 'PREPARED') {
-        console.log("prepared");
-    } else {
-        console.log(state);
+    if (state === 'PREPARED') {
+        console.log("IMAP " + state);
     }
 });
 
@@ -122,9 +119,9 @@ async function startBot() {
     await client.initCrypto();
     await client.startClient({initialSyncLimit: 200});
   } catch (err) {
-    console.log(err)
+    console.log(err.message)
   }
 }
 
 startBot();
-setInterval(processUnseen, 10 * 1000);
+setInterval(processUnseen, config.get("refresh_interval") * 1000);
