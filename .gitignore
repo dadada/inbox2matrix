@@ -1,3 +1,4 @@
 config/production.json
+config/testing.json
 *.js
 node_modules/
