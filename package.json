@@ -8,7 +8,7 @@
     "config": "^3.1.0",
     "dom-storage": "^2.1.0",
     "imap": "^0.8.19",
-    "matrix-js-sdk": "^17.2.0",
+    "matrix-js-sdk": "^19.7.0",
     "olm": "https://matrix.org/packages/npm/olm/olm-3.0.0.tgz",
     "process": "^0.11.10"
   },
