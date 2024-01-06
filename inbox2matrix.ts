@@ -1,4 +1,4 @@
-import Imap = require('imap');
+import Imap = require('node-imap');
 import config = require('config');
 
 //global.Olm = require('olm');
